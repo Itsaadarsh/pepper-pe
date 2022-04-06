@@ -1,30 +1,16 @@
-import express from 'express';
-import cors from 'cors';
-import { producer } from './kafka/producer';
-import { consumer } from './kafka/consumer';
+import { kafkaConsumer } from './kafka/consumer';
+import { app } from './app';
+import mongoose from 'mongoose';
 
-const app = express();
-app.use(cors());
+app.listen(process.env.PORT, async () => {
+  try {
+    await kafkaConsumer();
+    console.log('Consumer Connected');
 
-consumer().then(() => {
-  console.log('Consumer Connected');
-});
-
-app.get('/produce', async (_, res) => {
-  await producer.connect();
-  await producer.send({
-    topic: 'pp-default',
-    messages: [
-      {
-        value: JSON.stringify({
-          msg: 'Welcome to Pepper Pe!',
-        }),
-      },
-    ],
-  });
-  res.send('msg sent');
-});
-
-app.listen(8000, () => {
-  console.log('Server started at 8080');
+    await mongoose.connect(process.env.MONGO_URI!);
+    console.log('DB Connected');
+  } catch (err) {
+    console.log(err);
+  }
+  console.log(`Server started at ${process.env.PORT}`);
 });

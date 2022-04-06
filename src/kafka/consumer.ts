@@ -1,7 +1,7 @@
 import { EachMessagePayload } from 'kafkajs';
 import { kafka } from './config';
 
-export const consumer = async () => {
+export const kafkaConsumer = async () => {
   const consume = kafka.consumer({
     groupId: 'pp-consumer',
   });
