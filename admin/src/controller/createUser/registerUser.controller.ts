@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt';
 import validate from '../../middlerware/reqBodyValidation';
 import { isEmailAvailableRepo, insertUserRepo } from '../../repository/createUser/register.repo';
 import { updateAccountBalanceRepo } from '../../repository/depWith/depWith.repo';
+import { producerEmit } from '../../kafka/producer';
 
 export const registerUser = async (req: express.Request, res: express.Response) => {
   try {
@@ -30,6 +31,16 @@ export const registerUser = async (req: express.Request, res: express.Response) 
         error: false,
         data: { message: [`User successfully registered with account number ${createdUser.account_number}`] },
       });
+
+      const kafkaData = JSON.stringify({
+        account_number: createdUser.account_number,
+        password: createdUser.password,
+        email: createdUser.email,
+        name: createdUser.name,
+        account_balance: createdUser.account_balance,
+      });
+
+      await producerEmit(`${process.env.KAFKA_TOPIC}`, kafkaData, 'userCreated');
       return;
     });
   } catch (err) {
