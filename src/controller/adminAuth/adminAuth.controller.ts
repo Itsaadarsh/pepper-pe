@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import validate from '../../helper/reqBodyValidation';
+import validate from '../../middlerware/reqBodyValidation';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { isAdminIDAvailableRepo } from '../../repository/adminAuth/adminAuth.repo';
@@ -11,8 +11,8 @@ export const adminLogin = async (req: Request, res: Response) => {
       return;
     }
 
-    const { adminId, password }: { adminId: string; password: string } = req.body;
-    const isAdminAvailable = await isAdminIDAvailableRepo(+adminId);
+    const { admin_id, password }: { admin_id: string; password: string } = req.body;
+    const isAdminAvailable = await isAdminIDAvailableRepo(+admin_id);
 
     if (isAdminAvailable.length == 0) {
       res.status(400).json({ error: true, data: { message: ['Invalid Admin ID'] } });
@@ -26,7 +26,7 @@ export const adminLogin = async (req: Request, res: Response) => {
       }
 
       // Generating JWT Token
-      const token: string = jwt.sign({ adminId: isAdminAvailable[0].adminId }, process.env.JWT_TOKEN!, {
+      const token: string = jwt.sign({ admin_id: isAdminAvailable[0].admin_id }, process.env.JWT_TOKEN!, {
         expiresIn: '24h',
       });
 
