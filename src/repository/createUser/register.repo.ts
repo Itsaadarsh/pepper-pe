@@ -17,8 +17,6 @@ const insertUserRepo = async (
   account_balance: number
 ) => {
   const bankDetails = await ppBankDetailsEntity.findOne({ bank_id: 1 });
-  const updateBalance = +bankDetails!.total_bank_balance + account_balance;
-  bankDetails!.total_bank_balance = updateBalance;
   bankDetails!.number_of_users += 1;
   await bankDetails!.save();
 
