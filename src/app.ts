@@ -1,10 +1,13 @@
 import express from 'express';
 import cors from 'cors';
-import { producerRoute } from './routes/producer';
+import { adminAuthRoute } from './routes/adminAuth.route';
+import { json } from 'body-parser';
 
 const app = express();
+
+app.use(json());
 app.use(cors());
 
-app.use('/api/admin', producerRoute);
+app.use('/api/admin', adminAuthRoute);
 
 export { app };
