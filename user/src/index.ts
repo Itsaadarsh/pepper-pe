@@ -10,9 +10,9 @@ app.listen(process.env.PORT, async () => {
     // console.log('Consumer Connected');
 
     await mongoose.connect(process.env.MONGO_URI!);
-    console.log('DB Connected');
+    console.log('User Service DB Connected');
   } catch (err) {
     console.log(err);
   }
-  console.log(`Server started at ${process.env.PORT}`);
+  console.log(`User Service Server started at ${process.env.PORT}`);
 });
