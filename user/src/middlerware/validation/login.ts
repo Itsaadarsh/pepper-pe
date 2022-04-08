@@ -2,7 +2,7 @@ import { body } from 'express-validator';
 
 export default module.exports = () => {
   return [
-    body('admin_id').isLength({ min: 4, max: 4 }).withMessage('Invalid Admin ID'),
+    body('account_number').isLength({ min: 16, max: 16 }).withMessage('Invalid Account Number'),
     body('password')
       .trim()
       .isLength({ min: 5, max: 30 })
