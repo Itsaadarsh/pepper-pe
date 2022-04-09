@@ -15,6 +15,8 @@ export interface TRANSACTION_SCHEMA extends mongoose.Document {
   to: number;
   amount: number;
   remarks: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 const transactionEntity = mongoose.model<TRANSACTION_SCHEMA>('transactions', transactionSchema);
