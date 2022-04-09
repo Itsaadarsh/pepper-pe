@@ -1,7 +1,7 @@
 import express from 'express';
 import bcrypt from 'bcrypt';
 import validate from '../../middlerware/reqBodyValidation';
-import { isEmailAvailableRepo, insertUserRepo } from '../../repository/createUser/register.repo';
+import { isEmailAvailableRepo, insertUserRepo } from '../../repository/user/register.repo';
 import { updateAccountBalanceRepo } from '../../repository/depWith/depWith.repo';
 import { producerEmit } from '../../kafka/producer';
 
@@ -40,7 +40,7 @@ export const registerUser = async (req: express.Request, res: express.Response) 
         account_balance: createdUser.account_balance,
       });
 
-      await producerEmit(`${process.env.KAFKA_TOPIC}`, kafkaData, 'userCreated');
+      await producerEmit('pp_user_topic', kafkaData, 'userCreated');
       return;
     });
   } catch (err) {

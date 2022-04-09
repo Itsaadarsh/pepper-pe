@@ -29,4 +29,19 @@ const insertUserRepo = async (
   }).save();
 };
 
-export { isEmailAvailableRepo, isAccountNumberAvailableRepo, insertUserRepo };
+const updateUserBalanceRepo = async (
+  user_1: number,
+  user_1_balance: number,
+  user_2: number,
+  user_2_balance: number
+) => {
+  const user_1_account = await isAccountNumberAvailableRepo(user_1);
+  user_1_account[0].account_balance = user_1_balance;
+  await user_1_account[0].save();
+
+  const user_2_account = await isAccountNumberAvailableRepo(user_2);
+  user_2_account[0].account_balance = user_2_balance;
+  await user_2_account[0].save();
+};
+
+export { isEmailAvailableRepo, isAccountNumberAvailableRepo, insertUserRepo, updateUserBalanceRepo };

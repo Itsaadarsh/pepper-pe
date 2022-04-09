@@ -1,12 +1,12 @@
 import { EachMessagePayload } from 'kafkajs';
 import { kafka } from './config';
 import dotenv from 'dotenv';
-import { insertNewUser } from 'src/repository/userDetails/userDetails.repo';
+import { insertNewUser } from '../repository/userDetails/userDetails.repo';
 
 dotenv.config();
 export const kafkaConsumer = async () => {
   const consume = kafka.consumer({
-    groupId: `${process.env.KAFKA_GROUPID}`,
+    groupId: `${process.env.KAFKA_CLIENTID}`,
   });
 
   await consume.connect();
@@ -19,6 +19,7 @@ export const kafkaConsumer = async () => {
       if (key === 'userCreated') {
         const { $numberDecimal } = value.account_balance;
         await insertNewUser(value.account_number, value.password, value.email, value.name, $numberDecimal);
+        console.log('User service: User created');
       }
     },
   });

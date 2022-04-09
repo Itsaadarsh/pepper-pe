@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import validate from '../../middlerware/reqBodyValidation';
 import { isAccountNumberAvailableRepo } from '../../repository/userDetails/userDetails.repo';
 import { insertTransaction } from '../../repository/transaction/transaction.repo';
+import { producerEmit } from '../../kafka/producer';
 
 export const postTransactionController = async (req: Request, res: Response) => {
   try {
@@ -65,6 +66,15 @@ export const postTransactionController = async (req: Request, res: Response) => 
         ],
       },
     });
+
+    const kafkaData = JSON.stringify({
+      user_1: from,
+      user_1_balance: updateFromBal,
+      user_2: to,
+      user_2_balance: updateToBal,
+    });
+
+    await producerEmit('pp_admin_topic', kafkaData, 'transactionCreated');
     return;
   } catch (err) {
     res.status(400).json({ error: true, data: { message: [err.message] } });

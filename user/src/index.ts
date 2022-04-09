@@ -1,4 +1,4 @@
-// import { kafkaConsumer } from './kafka/consumer';
+import { kafkaConsumer } from './kafka/consumer';
 import { app } from './app';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
@@ -9,8 +9,8 @@ app.listen(process.env.PORT, async () => {
     await mongoose.connect(process.env.MONGO_URI!);
     console.log('User Service DB Connected');
 
-    // await kafkaConsumer();
-    // console.log('User Service Consumer Connected');
+    await kafkaConsumer();
+    console.log('User Service Consumer Connected');
   } catch (err) {
     console.log(err);
   }

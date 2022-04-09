@@ -1,6 +1,6 @@
 import express from 'express';
 import { DEPOSIT_WITHDRAW_SCHEMA } from '../../entity/depWith.entity';
-import { isAccountNumberAvailableRepo } from '../../repository/createUser/register.repo';
+import { isAccountNumberAvailableRepo } from '../../repository/user/register.repo';
 import validate from '../../middlerware/reqBodyValidation';
 import { updateAccountBalanceRepo } from '../../repository/depWith/depWith.repo';
 
