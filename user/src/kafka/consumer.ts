@@ -1,7 +1,7 @@
 import { EachMessagePayload } from 'kafkajs';
 import { kafka } from './config';
 import dotenv from 'dotenv';
-import userEntity from '../entity/user.entity';
+import { insertNewUser } from 'src/repository/userDetails/userDetails.repo';
 
 dotenv.config();
 export const kafkaConsumer = async () => {
@@ -18,13 +18,7 @@ export const kafkaConsumer = async () => {
 
       if (key === 'userCreated') {
         const { $numberDecimal } = value.account_balance;
-        await new userEntity({
-          account_number: value.account_number,
-          account_balance: $numberDecimal,
-          email: value.email,
-          name: value.name,
-          password: value.password,
-        }).save();
+        await insertNewUser(value.account_number, value.password, value.email, value.name, $numberDecimal);
       }
     },
   });

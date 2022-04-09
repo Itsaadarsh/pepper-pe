@@ -8,4 +8,5 @@ export default module.exports = () => {
       .isLength({ min: 5, max: 30 })
       .withMessage('Password must be between 5 - 30 characters'),
   ];
+  
 };
