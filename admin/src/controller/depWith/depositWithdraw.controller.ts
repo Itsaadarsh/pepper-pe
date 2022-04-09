@@ -3,6 +3,7 @@ import { DEPOSIT_WITHDRAW_SCHEMA } from '../../entity/depWith.entity';
 import { isAccountNumberAvailableRepo } from '../../repository/user/register.repo';
 import validate from '../../middlerware/reqBodyValidation';
 import { updateAccountBalanceRepo } from '../../repository/depWith/depWith.repo';
+import { producerEmit } from '../../kafka/producer';
 
 export const depWithController = async (req: express.Request, res: express.Response) => {
   try {
@@ -46,6 +47,15 @@ export const depWithController = async (req: express.Request, res: express.Respo
           ],
         },
       });
+
+      const kafkaData = JSON.stringify({
+        account_number: account_number,
+        account_balance: isAccountNumberValid[0].account_balance,
+        remarks: remarks,
+        amount: amount,
+      });
+
+      await producerEmit('pp_user_topic', kafkaData, 'depWithCreated');
       return;
     } else {
       res.status(400).json({ error: true, data: { message: [`Invalid remarks!`] } });

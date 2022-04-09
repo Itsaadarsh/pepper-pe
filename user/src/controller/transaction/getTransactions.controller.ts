@@ -4,20 +4,11 @@ import { getTransactionsRepo } from '../../repository/transaction/transaction.re
 export const getTransactionsController = async (req: Request, res: Response) => {
   try {
     const { account_number }: { account_number: number } = req.user;
-    const allTransaction = await getTransactionsRepo(account_number);
+    const { debit, credit } = await getTransactionsRepo(account_number);
 
-    const responseData:
-      | {
-          id: string;
-          from: number;
-          to: number;
-          amount: number;
-          remarks: string;
-          timestamp: string;
-        }
-      | any = [];
+    const responseData: any = [];
 
-    allTransaction.forEach(trans => {
+    debit.forEach(trans => {
       const stringAmt = JSON.stringify(trans.amount);
       const amount = JSON.parse(stringAmt);
       const { $numberDecimal } = amount;
@@ -29,6 +20,23 @@ export const getTransactionsController = async (req: Request, res: Response) => 
         amount: +$numberDecimal,
         remarks: trans.remarks,
         timestamp: trans.createdAt,
+        flow: 'DEBIT',
+      });
+    });
+
+    credit.forEach(trans => {
+      const stringAmt = JSON.stringify(trans.amount);
+      const amount = JSON.parse(stringAmt);
+      const { $numberDecimal } = amount;
+
+      responseData.push({
+        id: trans._id,
+        from: trans.from,
+        to: trans.to,
+        amount: +$numberDecimal,
+        remarks: trans.remarks,
+        timestamp: trans.createdAt,
+        flow: 'CREDIT',
       });
     });
 

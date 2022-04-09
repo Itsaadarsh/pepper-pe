@@ -1,4 +1,5 @@
 import userEntity from '../../entity/user.entity';
+import { updateDepositWithdraw } from '../transaction/transaction.repo';
 
 const isEmailAvailableRepo = async (email: string) => {
   return await userEntity.find({ email });
@@ -18,4 +19,17 @@ const insertNewUser = async (
   await new userEntity({ account_number, account_balance, email, name, password }).save();
 };
 
-export { isEmailAvailableRepo, isAccountNumberAvailableRepo, insertNewUser };
+const updateUserBalance = async (
+  account_number: number,
+  account_balance: number,
+  remarks: string,
+  amount: number
+) => {
+  const user = await isAccountNumberAvailableRepo(account_number);
+  user[0].account_balance = account_balance;
+  await user[0].save();
+
+  await updateDepositWithdraw(remarks, account_number, amount);
+};
+
+export { isEmailAvailableRepo, isAccountNumberAvailableRepo, insertNewUser, updateUserBalance };

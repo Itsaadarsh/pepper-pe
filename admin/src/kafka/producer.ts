@@ -16,7 +16,7 @@ export const producerEmit = async (topic: string, msg: string, key: string) => {
         },
       ],
     });
-    console.log('Producer message emitted');
+    console.log('\nKafka ADMIN service (Producer): Message emitted\n');
   } catch (err) {
     console.log('Producer Error: ', err);
   }

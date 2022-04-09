@@ -23,7 +23,7 @@ export const kafkaConsumer = async () => {
           +value.user_2,
           +value.user_2_balance
         );
-        console.log('User balance updated');
+        console.log('\nKafka ADMIN service (Consumer): User balance updated\n');
       }
     },
   });
