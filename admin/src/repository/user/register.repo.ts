@@ -44,4 +44,14 @@ const updateUserBalanceRepo = async (
   await user_2_account[0].save();
 };
 
-export { isEmailAvailableRepo, isAccountNumberAvailableRepo, insertUserRepo, updateUserBalanceRepo };
+const getAllusersRepo = async () => {
+  return await userEntity.find({});
+};
+
+export {
+  isEmailAvailableRepo,
+  isAccountNumberAvailableRepo,
+  insertUserRepo,
+  updateUserBalanceRepo,
+  getAllusersRepo,
+};
